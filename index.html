@@ -125,6 +125,15 @@
       }
     });
 
+    answerInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    submitBtn.click();
+  }
+});
+
+    
+
     // Load the quiz data on page load
     loadQuizData();
   </script>
