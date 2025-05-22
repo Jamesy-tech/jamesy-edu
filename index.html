@@ -166,13 +166,14 @@
       clearInterval(timerInterval);
     }
 
-   pauseBtn.addEventListener('click', () => {
+pauseBtn.addEventListener('click', () => {
   if (!isPaused) {
     // Pause quiz
     isPaused = true;
     pauseBtn.textContent = 'Resume';
     answerInput.disabled = true;
     submitBtn.disabled = true;
+    quizContainer.style.display = 'none'; // Hide quiz
     pausedOverlay.classList.add('show');
   } else {
     // Resume quiz
@@ -180,10 +181,12 @@
     pauseBtn.textContent = 'Pause';
     answerInput.disabled = false;
     submitBtn.disabled = false;
+    quizContainer.style.display = 'block'; // Show quiz again
     pausedOverlay.classList.remove('show');
     answerInput.focus();
   }
 });
+
 
     resumeBtn.addEventListener('click', () => {
   pauseBtn.click(); 
