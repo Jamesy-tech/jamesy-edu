@@ -212,13 +212,16 @@
         showQuestion();
       }
     });
+    
 
-    answerInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        if (!isPaused) submitBtn.click();
-      }
-    });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !isPaused && quizContainer.style.display !== 'none') {
+    e.preventDefault();
+    submitBtn.click();
+  }
+});
+
+
 
     startBtn.addEventListener('click', () => {
       startBtn.style.display = 'none';
