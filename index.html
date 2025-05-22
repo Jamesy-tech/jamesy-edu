@@ -12,6 +12,42 @@
       text-align: center;
       position: relative;
     }
+
+    #pausedOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+}
+
+#pausedOverlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.paused-box {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+#resumeBtn {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+    
     #timerContainer {
       position: fixed;
       top: 10px;
@@ -77,6 +113,15 @@
     <div id="feedback"></div>
   </div>
 
+  <div id="pausedOverlay">
+  <div class="paused-box">
+    <h2>⏸️ Paused</h2>
+    <p>Take a breather. Click resume when you're ready!</p>
+    <button id="resumeBtn">Resume</button>
+  </div>
+</div>
+
+  
   <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPE-4K795XhOnWcN9apup6U-FLcP6MzuVmmYU8U2OsWZFTx_xQt93S1qZZyze-n7OPrAp007oDU4CW/pub?output=csv';
 
@@ -91,6 +136,8 @@
     const pauseBtn = document.getElementById('pauseBtn');
     const quizContainer = document.getElementById('quizContainer');
     const questionEl = document.getElementById('question');
+    const pausedOverlay = document.getElementById('pausedOverlay');
+    const resumeBtn = document.getElementById('resumeBtn');
     const answerInput = document.getElementById('answerInput');
     const submitBtn = document.getElementById('submitBtn');
     const feedbackEl = document.getElementById('feedback');
@@ -119,25 +166,30 @@
       clearInterval(timerInterval);
     }
 
-    pauseBtn.addEventListener('click', () => {
-      if (!isPaused) {
-        // Pause quiz
-        isPaused = true;
-        pauseBtn.textContent = 'Resume';
-        answerInput.disabled = true;
-        submitBtn.disabled = true;
-        feedbackEl.textContent = 'Quiz paused';
-        feedbackEl.style.color = 'gray';
-      } else {
-        // Resume quiz
-        isPaused = false;
-        pauseBtn.textContent = 'Pause';
-        answerInput.disabled = false;
-        submitBtn.disabled = false;
-        feedbackEl.textContent = '';
-        answerInput.focus();
-      }
-    });
+   pauseBtn.addEventListener('click', () => {
+  if (!isPaused) {
+    // Pause quiz
+    isPaused = true;
+    pauseBtn.textContent = 'Resume';
+    answerInput.disabled = true;
+    submitBtn.disabled = true;
+    pausedOverlay.classList.add('show');
+  } else {
+    // Resume quiz
+    isPaused = false;
+    pauseBtn.textContent = 'Pause';
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    pausedOverlay.classList.remove('show');
+    answerInput.focus();
+  }
+});
+
+    resumeBtn.addEventListener('click', () => {
+  pauseBtn.click(); 
+});
+
+    
 
     async function loadQuizData() {
       try {
