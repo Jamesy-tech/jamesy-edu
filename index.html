@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
   <link rel="icon" href="shapes.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_forward" />
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
-  <title>Jamesy Edu</title>
+  <title>Jamesy EDU</title>
   <style>
     body {
       margin: 0;
@@ -49,6 +53,7 @@
 
     .page {
       display: none;
+      font-family:"Lato";
     }
 
     .page.active {
@@ -121,6 +126,56 @@
   outline:none;
 }
 
+.container {
+  padding-left:50px;
+}
+
+#incorrect {
+  color:red;
+  display:none
+}
+
+#code {
+  background:white;
+  border:none;
+  border-radius:2px;
+  padding:5px;
+  padding-top:7px;
+  padding-bottom:7px;
+  width:300px;
+  font-family:"Mulish";
+  height:20px;
+  padding-left:17px;
+  margin-top:6px;
+  margin-right:2px;
+  outline:solid black 1px;
+  
+}
+
+#submit_code {
+   background:#00d5ff;
+   padding:10px;
+   border-radius:25px;
+   width:45px;
+   height:45px;
+   border:none;
+   margin-left:7px;
+   cursor:pointer;
+}
+
+#code:focus {
+  outline:solid dodgerblue 2px;
+}
+
+#class_pages {
+  display:none;
+}
+
+.code-container {
+  display:flex;
+  margin-bottom:7px;
+}
+
 
   </style>
 </head>
@@ -132,11 +187,23 @@
         <span class="title_p1">Jamesy</span>
         <span class="title_p2">Education</span>
      <ul>
-  <li onclick="showPage('home')">Home</li>
 
-  <li onclick="showPage('lessons')">Maths</li>
+      <div id="signed_out">
+      <li onclick="showPage('join')">Join class</li>
+      </div>
+
+      <div id="class_pages">
+
+  <li onclick="showPage('home')">Home</li>
+  
+
+  
+  <li onclick="showPage('maths')">Maths</li>
   <li class="nested" onclick="showPage('daily-review')">└ Daily Review</li>
- 
+
+    <li onclick="signOut()">Sign out</li>
+
+ </div>
 
 </ul>
 
@@ -144,22 +211,35 @@
   </nav>
 
   <main>
-    <div id="home" class="page active">
-      <h1>Welcome to Jamesy Education</h1>
-      <p>Welcome to the school product created by Jamesy.</p>
+    <div id="join" class="page active">
+   <div class="container">
+      <h2>Please enter your class code or token</h2>
+   <div class="code-container"><input spellcheck="false" id="code" placeholder="Class code or token">
+       <button type="submit" id="submit_code" onclick="checkToken()">
+        <span class="material-symbols-outlined">
+arrow_forward
+</span>
+       </button>
+       </div>
+
+      <span id="incorrect">That's not a valid code!</span>
+      </div>
+   
+
+    </div>
+
+     <div id="home" class="page">
+      <h1>Welcome to <span id="room_number"></span></h1>
+      <p>You can access your assigned tasks and resources from here.</p>
       <div class="window">
-        <strong>Hello, world!</strong>
-        <p>This is a simulated classic message box.</p>
-        <div class="buttons">
-          <button>OK</button>
-          <button>Cancel</button>
-        </div>
+        <p><strong>Example Button:</strong></p>
+        <button>Click Me</button>
       </div>
     </div>
 
-    <div id="lessons" class="page">
-      <h1>Lessons</h1>
-      <p>Here we could list things like buttons, sliders, etc.</p>
+    <div id="maths" class="page">
+      <h1>Maths</h1>
+      <p>Here you can find all your resources for Maths.</p>
       <div class="window">
         <p><strong>Example Button:</strong></p>
         <button>Click Me</button>
@@ -191,12 +271,81 @@
   </main>
 
   <script>
+
+const code = document.getElementById("code")
+
+function redInput() {
+  document.getElementById("code").style.outlineColor = "red";
+}
+
+function regularInput() {
+  document.getElementById("code").style.outlineColor = "";
+}
+
+    function checkToken() {
+      if (code.value == "abj543") {
+
+         var confirmed = confirm("Join Room 25, Murrays Bay Intermediate?")
+
+         if (confirmed) {
+         localStorage.setItem("abj543", true);
+         document.getElementById("incorrect").style.display = "none";
+         regularInput()
+         window.location.reload();
+         }
+
+      } else {
+
+        document.getElementById("incorrect").style.display = "block";
+        redInput()
+
+      }
+    }
     function showPage(id) {
       document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
       });
       document.getElementById(id).classList.add('active');
     }
+
+  window.addEventListener("DOMContentLoaded", () => {
+  code.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.getElementById("submit_code").click();
+    }
+  });
+});
+
+function signedIn(room) {
+  document.getElementById("class_pages").style.display = "block";
+    document.getElementById("signed_out").style.display = "none";
+    document.getElementById("room_number").textContent = room;
+    document.getElementById("home").classList.add('active');
+    document.getElementById("join").classList.remove('active');
+}
+
+if (localStorage.getItem("abj543") === "true") {
+    
+    signedIn("Room 25, Murrays Bay Intermediate")
+
+}
+
+function signOut() {
+
+  const confirmed = confirm("Are you sure you want to sign out of your class?");
+  
+  if (confirmed) {
+
+    localStorage.setItem("abj543", "false");
+
+    alert("You have signed out.");
+    window.location.reload();
+  }
+}
+
+
+
   </script>
 
 </body>
