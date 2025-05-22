@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Google Sheets Table Display</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      margin: 10px 0 5px;
+      color: #333;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #888;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Your three titles -->
+  <h2>Title 1: Quiz Questions</h2>
+  <h2>Title 2: Options</h2>
+  <h2>Title 3: Answers</h2>
+
+  <!-- Container for the table -->
+  <div id="table-container">Loading data...</div>
+
+  <script>
+    async function loadSheet() {
+      const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPE-4K795XhOnWcN9apup6U-FLcP6MzuVmmYU8U2OsWZFTx_xQt93S1qZZyze-n7OPrAp007oDU4CW/pub?output=csv';
+
+      try {
+        const response = await fetch(csvUrl);
+        const csvText = await response.text();
+
+        // Parse CSV into rows (split by new line)
+        const rows = csvText.trim().split('\n').map(row => row.split(','));
+
+        // Create table element
+        const table = document.createElement('table');
+
+        // Create table header from first row
+        const headerRow = document.createElement('tr');
+        rows[0].forEach(headerText => {
+          const th = document.createElement('th');
+          th.textContent = headerText;
+          headerRow.appendChild(th);
+        });
+        table.appendChild(headerRow);
+
+        // Add remaining rows as table rows
+        for(let i = 1; i < rows.length; i++) {
+          const tr = document.createElement('tr');
+          rows[i].forEach(cellText => {
+            const td = document.createElement('td');
+            td.textContent = cellText;
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+        }
+
+        // Add table to the page
+        const container = document.getElementById('table-container');
+        container.innerHTML = ''; // Clear "Loading..."
+        container.appendChild(table);
+
+      } catch (error) {
+        console.error('Error loading Google Sheet:', error);
+        document.getElementById('table-container').textContent = 'Failed to load data.';
+      }
+    }
+
+    window.onload = loadSheet;
+  </script>
+</body>
+</html>
