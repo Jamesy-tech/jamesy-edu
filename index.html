@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Simple Math Quiz</title>
+  <title>Simple Math Quiz with Score</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -47,7 +47,8 @@
 
     let quizData = [];
     let currentQuestionIndex = 0;
-    let isCheckingAnswer = true; // true when waiting for Submit, false when waiting for Next
+    let isCheckingAnswer = true;
+    let score = 0;
 
     const questionEl = document.getElementById('question');
     const answerInput = document.getElementById('answerInput');
@@ -74,8 +75,8 @@
 
     function showQuestion() {
       if (currentQuestionIndex >= quizData.length) {
-        // Quiz finished
-        questionEl.textContent = 'Quiz complete! Well done.';
+        // Quiz finished: show final score
+        questionEl.textContent = `Quiz complete! You got ${score} out of ${quizData.length} correct! 🎉`;
         answerInput.style.display = 'none';
         submitBtn.style.display = 'none';
         feedbackEl.textContent = '';
@@ -104,6 +105,7 @@
       if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
         feedbackEl.style.color = 'green';
         feedbackEl.textContent = 'Correct! 🎉';
+        score++;
       } else {
         feedbackEl.style.color = 'red';
         feedbackEl.textContent = `Wrong. The correct answer is ${correctAnswer}.`;
