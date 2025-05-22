@@ -1,294 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Daily Review</title>
+  <link rel="icon" href="shapes.png">
+  <meta charset="UTF-8">
+  <title>Jamesy Edu</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
-      text-align: center;
-      position: relative;
+      margin: 0;
+      font-family: monospace;
+      display: flex;
     }
 
-    #pausedOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 100;
-}
+    nav {
+      width: 220px;
+      background: #f0f0f0;
+      border-right: 2px solid #ccc;
+      padding: 1rem;
+      box-sizing: border-box;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+    }
 
-#pausedOverlay.show {
-  opacity: 1;
-  pointer-events: auto;
-}
+    .tree ul {
+      list-style: none;
+      padding-left: 0em;
+    }
 
-.paused-box {
-  background: white;
-  padding: 30px 40px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 90%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
+    .tree li {
+      margin: 0.2em 0;
+      padding-top:10px;
+      padding-bottom:10px;
+      cursor: pointer;
+      padding-left:1em;
+      border-radius:10px;
+    }
 
-#resumeBtn {
-  margin-top: 20px;
-  font-size: 1.1rem;
-  padding: 8px 16px;
-  cursor: pointer;
-}
+    .tree li:hover, .tree li.nested:hover  {
+    color: blue;
+    }
 
-    
-    #timerContainer {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #222;
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 5px;
-      font-weight: bold;
+    main {
+      flex-grow: 1;
+      padding: 2rem;
+      background: #fff;
+    }
+
+    .page {
       display: none;
-      gap: 10px;
-      align-items: center;
-      font-size: 1rem;
     }
-    #pauseBtn {
-      cursor: pointer;
-      background: #444;
-      border: none;
-      color: white;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-weight: normal;
-      font-size: 0.9rem;
+
+    .page.active {
+      display: block;
     }
-    #question {
-      font-size: 1.5em;
-      margin-bottom: 20px;
+
+    .window {
+      border: 2px solid #aaa;
+      padding: 1rem;
+      background: #fff;
+      box-shadow: 2px 2px #ccc;
+      margin-top: 1rem;
     }
-    input[type="text"] {
-      font-size: 1.2em;
-      padding: 8px;
-      width: 100px;
-      text-align: center;
+
+    .buttons {
+      margin-top: 1rem;
     }
+
     button {
-      margin-left: 10px;
-      font-size: 1.2em;
-      padding: 8px 16px;
-      cursor: pointer;
+      font-family: monospace;
+      margin-right: 0.5rem;
     }
-    #feedback {
-      margin-top: 20px;
-      font-weight: bold;
-      height: 24px;
+
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      display: inline-block;
     }
+
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    .title_p1 {
+        font-size:18px;
+        margin-top:25px;
+    }
+
+    .title_p2 {
+        font-size:24px;
+
+    }
+
+    .title_p1, .title_p2 {
+       display:block;
+       cursor:default;
+       margin-left:10px;
+    }
+
+    .logo {
+      width:95%;
+      cursor:default;
+      margin:auto;
+      display:block;
+    }
+
+
+   .tree li.nested {
+  padding-left: 2em;
+  font-size: 0.95em;
+  color: #444;
+}
+
+.full_iframe {
+  width:100%;
+  height:100vh;
+  border:none;
+  outline:none;
+}
+
+
   </style>
 </head>
 <body>
-  
 
-  <button id="startBtn">Start Quiz</button>
+  <nav>
+    <div class="tree">
+<img src="icon.png" class="logo">
+        <span class="title_p1">Jamesy</span>
+        <span class="title_p2">Education</span>
+     <ul>
+  <li onclick="showPage('home')">Home</li>
 
-  <div id="timerContainer">
-    <span id="timer">00:00</span>
-    <button id="pauseBtn">Pause</button>
-  </div>
+  <li onclick="showPage('lessons')">Maths</li>
+  <li class="nested" onclick="showPage('daily-review')">└ Daily Review</li>
+ 
 
-  <div id="quizContainer" style="display:none;">
-    <div id="question">Loading question...</div>
-    <input type="text" id="answerInput" autocomplete="off" />
-    <button id="submitBtn">Submit</button>
-    <div id="feedback"></div>
-  </div>
+</ul>
 
-  <div id="pausedOverlay">
-  <div class="paused-box">
-    <h2>⏸️ Paused</h2>
-    <p>Take a breather. Click resume when you're ready!</p>
-    <button id="resumeBtn">Resume</button>
-  </div>
-</div>
+    </div>
+  </nav>
 
-  
+  <main>
+    <div id="home" class="page active">
+      <h1>Welcome to Jamesy Education</h1>
+      <p>Welcome to the school product created by Jamesy.</p>
+      <div class="window">
+        <strong>Hello, world!</strong>
+        <p>This is a simulated classic message box.</p>
+        <div class="buttons">
+          <button>OK</button>
+          <button>Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="lessons" class="page">
+      <h1>Lessons</h1>
+      <p>Here we could list things like buttons, sliders, etc.</p>
+      <div class="window">
+        <p><strong>Example Button:</strong></p>
+        <button>Click Me</button>
+      </div>
+    </div>
+ 
+
+     <div id="daily-review" class="page">
+      <iframe class="full_iframe" src="daily_review.html"></iframe>
+    </div>
+ 
+
+    <div id="resources" class="page">
+      <h1>Resources</h1>
+      <p>Here we could list things like buttons, sliders, etc.</p>
+      <div class="window">
+        <p><strong>Example Button:</strong></p>
+        <button>Click Me</button>
+      </div>
+    </div>
+
+    <div id="about" class="page">
+      <h1>About This Demo</h1>
+      <p>Inspired by Windows 98 UI, but built with plain HTML, CSS, and JS.</p>
+      <pre><code>&lt;!-- No frameworks needed! --&gt;</code></pre>
+     
+
+    </div>
+  </main>
+
   <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPE-4K795XhOnWcN9apup6U-FLcP6MzuVmmYU8U2OsWZFTx_xQt93S1qZZyze-n7OPrAp007oDU4CW/pub?output=csv';
-
-    let quizData = [];
-    let currentQuestionIndex = 0;
-    let isCheckingAnswer = true;
-    let score = 0;
-
-    const startBtn = document.getElementById('startBtn');
-    const timerContainer = document.getElementById('timerContainer');
-    const timerEl = document.getElementById('timer');
-    const pauseBtn = document.getElementById('pauseBtn');
-    const quizContainer = document.getElementById('quizContainer');
-    const questionEl = document.getElementById('question');
-    const pausedOverlay = document.getElementById('pausedOverlay');
-    const resumeBtn = document.getElementById('resumeBtn');
-    const answerInput = document.getElementById('answerInput');
-    const submitBtn = document.getElementById('submitBtn');
-    const feedbackEl = document.getElementById('feedback');
-
-    let timerInterval = null;
-    let elapsedSeconds = 0;
-    let isPaused = false;
-
-    // Timer formatting helper
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-      const secs = (seconds % 60).toString().padStart(2, '0');
-      return `${mins}:${secs}`;
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
     }
-
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        if (!isPaused) {
-          elapsedSeconds++;
-          timerEl.textContent = formatTime(elapsedSeconds);
-        }
-      }, 1000);
-    }
-
-    function stopTimer() {
-      clearInterval(timerInterval);
-    }
-
-pauseBtn.addEventListener('click', () => {
-  if (!isPaused) {
-    // Pause quiz
-    isPaused = true;
-    pauseBtn.textContent = 'Resume';
-    answerInput.disabled = true;
-    submitBtn.disabled = true;
-    quizContainer.style.display = 'none'; // Hide quiz
-    pausedOverlay.classList.add('show');
-  } else {
-    // Resume quiz
-    isPaused = false;
-    pauseBtn.textContent = 'Pause';
-    answerInput.disabled = false;
-    submitBtn.disabled = false;
-    quizContainer.style.display = 'block'; // Show quiz again
-    pausedOverlay.classList.remove('show');
-    answerInput.focus();
-  }
-});
-
-
-    resumeBtn.addEventListener('click', () => {
-  pauseBtn.click(); 
-});
-
-    
-
-    async function loadQuizData() {
-      try {
-        const response = await fetch(csvUrl);
-        const csvText = await response.text();
-        const rows = csvText.trim().split('\n').map(row => row.split(','));
-        quizData = rows.slice(1).map(r => ({
-          question: r[0].trim(),
-          answer: r[1].trim(),
-        }));
-        showQuestion();
-      } catch (error) {
-        questionEl.textContent = 'Failed to load quiz data.';
-        console.error(error);
-      }
-    }
-
-    function showQuestion() {
-      if (currentQuestionIndex >= quizData.length) {
-        stopTimer();
-        questionEl.textContent = `Quiz complete! You got ${score} out of ${quizData.length} correct! 🎉`;
-        answerInput.style.display = 'none';
-        submitBtn.style.display = 'none';
-        feedbackEl.textContent = `Time elapsed: ${formatTime(elapsedSeconds)}`;
-        feedbackEl.style.color = 'black';
-        pauseBtn.style.display = 'none';
-        return;
-      }
-
-      const q = quizData[currentQuestionIndex];
-      questionEl.textContent = `Q${currentQuestionIndex + 1}: ${q.question}`;
-      answerInput.value = '';
-      answerInput.disabled = false;
-      submitBtn.disabled = false;
-      feedbackEl.textContent = '';
-      submitBtn.textContent = 'Submit';
-      isCheckingAnswer = true;
-      answerInput.focus();
-    }
-
-    function checkAnswer() {
-      const userAnswer = answerInput.value.trim();
-      const correctAnswer = quizData[currentQuestionIndex].answer;
-
-      if (userAnswer === '') {
-        feedbackEl.textContent = 'Please enter an answer.';
-        feedbackEl.style.color = 'red';
-        return;
-      }
-
-      if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-        feedbackEl.style.color = 'green';
-        feedbackEl.textContent = 'Correct! 🎉';
-        score++;
-      } else {
-        feedbackEl.style.color = 'red';
-        feedbackEl.textContent = `Wrong. The correct answer is ${correctAnswer}.`;
-      }
-
-      answerInput.disabled = true;
-      submitBtn.textContent = 'Next';
-      isCheckingAnswer = false;
-    }
-
-    submitBtn.addEventListener('click', () => {
-      if (isPaused) return; // ignore clicks while paused
-
-      if (isCheckingAnswer) {
-        checkAnswer();
-      } else {
-        currentQuestionIndex++;
-        showQuestion();
-      }
-    });
-    
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !isPaused && quizContainer.style.display !== 'none') {
-    e.preventDefault();
-    submitBtn.click();
-  }
-});
-
-
-
-    startBtn.addEventListener('click', () => {
-      startBtn.style.display = 'none';
-      quizContainer.style.display = 'block';
-      timerContainer.style.display = 'flex';
-      elapsedSeconds = 0;
-      score = 0;
-      currentQuestionIndex = 0;
-      isPaused = false;
-      pauseBtn.textContent = 'Pause';
-      loadQuizData();
-      startTimer();
-    });
   </script>
+
 </body>
 </html>
