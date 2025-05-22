@@ -167,8 +167,17 @@
   </div>
 </div>
 
+<div id="reviewContainer" style="display:none; padding-left:50px; margin-top:30px;">
+  <h2>Review Summary</h2>
+  <div id="reviewContent"></div>
+</div>
+
   
   <script>
+
+let reviewData = [];
+
+
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPE-4K795XhOnWcN9apup6U-FLcP6MzuVmmYU8U2OsWZFTx_xQt93S1qZZyze-n7OPrAp007oDU4CW/pub?output=csv';
 
     let quizData = [];
@@ -289,14 +298,24 @@ pauseBtn.addEventListener('click', () => {
         return;
       }
 
-      if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-        feedbackEl.style.color = 'green';
-        feedbackEl.textContent = 'Correct! 🎉';
-        score++;
-      } else {
-        feedbackEl.style.color = 'red';
-        feedbackEl.textContent = `Incorrect... The correct answer was ${correctAnswer}.`;
-      }
+    const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+
+if (isCorrect) {
+  feedbackEl.style.color = 'green';
+  feedbackEl.textContent = 'Correct! 🎉';
+  score++;
+} else {
+  feedbackEl.style.color = 'red';
+  feedbackEl.textContent = `Incorrect... The correct answer was ${correctAnswer}.`;
+}
+
+reviewData.push({
+  question: quizData[currentQuestionIndex].question,
+  yourAnswer: userAnswer,
+  correctAnswer: correctAnswer,
+  isCorrect: isCorrect
+});
+
 
       answerInput.disabled = true;
       submitBtn.textContent = 'Next';
