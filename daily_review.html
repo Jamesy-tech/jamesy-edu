@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
   <title>Daily Review</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
-      text-align: center;
-      position: relative;
+      font-family:"Lato";
+     padding-left:50px;
     }
 
     #pausedOverlay {
@@ -79,8 +80,8 @@
     input[type="text"] {
       font-size: 1.2em;
       padding: 8px;
-      width: 100px;
-      text-align: center;
+      width: 50%;
+      font-family:"Lato"
     }
     button {
       margin-left: 10px;
@@ -88,17 +89,52 @@
       padding: 8px 16px;
       cursor: pointer;
     }
+
+    #submitBtn {
+      font-family: "Lato";
+      outline:solid black 1px;
+      display:block;
+      margin-top:20px;
+      width:150px;
+      margin-left:20px;
+      border-radius:1px;
+      border:none;
+    }
+
+      #submitBtn:hover {
+      outline:solid dodgerblue 2px;
+    }
+
     #feedback {
       margin-top: 20px;
       font-weight: bold;
       height: 24px;
     }
+
+    #startBtn {
+      font-family: "Lato";
+      margin-left:50px;
+      margin-top:50px;
+      outline:solid black 1px;
+      display:block;
+      border-radius:1px;
+      border:none;
+    }
+
+    #startBtn:hover {
+      outline:solid dodgerblue 2px;
+    }
+
+    #quizContainer {
+      padding-left:50px;
+    }
   </style>
 </head>
 <body>
   
-
-  <button id="startBtn">Start Quiz</button>
+<h1>Maths - Daily Review</h1>
+  <button id="startBtn">Start Review</button>
+  <br>
 
   <div id="timerContainer">
     <span id="timer">00:00</span>
