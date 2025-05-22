@@ -3,89 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Google Sheets Table Display</title>
+  <title>Simple Math Quiz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 0 20px;
+      max-width: 400px;
+      margin: 40px auto;
+      text-align: center;
     }
-    h2 {
-      margin: 10px 0 5px;
-      color: #333;
+    #question {
+      font-size: 1.5em;
+      margin-bottom: 20px;
     }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 15px;
+    input[type="text"] {
+      font-size: 1.2em;
+      padding: 8px;
+      width: 100px;
+      text-align: center;
     }
-    th, td {
-      border: 1px solid #888;
-      padding: 8px 12px;
-      text-align: left;
+    button {
+      margin-left: 10px;
+      font-size: 1.2em;
+      padding: 8px 16px;
+      cursor: pointer;
     }
-    th {
-      background-color: #eee;
+    #feedback {
+      margin-top: 20px;
+      font-weight: bold;
+      height: 24px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Your three titles -->
-  <h2>Title 1: Quiz Questions</h2>
-  <h2>Title 2: Options</h2>
-  <h2>Title 3: Answers</h2>
-
-  <!-- Container for the table -->
-  <div id="table-container">Loading data...</div>
+  <h1>Math Quiz</h1>
+  <div id="question">Loading question...</div>
+  <input type="text" id="answerInput" autocomplete="off" />
+  <button id="submitBtn">Submit</button>
+  <div id="feedback"></div>
 
   <script>
-    async function loadSheet() {
-      const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPE-4K795XhOnWcN9apup6U-FLcP6MzuVmmYU8U2OsWZFTx_xQt93S1qZZyze-n7OPrAp007oDU4CW/pub?output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPE-4K795XhOnWcN9apup6U-FLcP6MzuVmmYU8U2OsWZFTx_xQt93S1qZZyze-n7OPrAp007oDU4CW/pub?output=csv';
 
+    let quizData = [];
+    let currentQuestionIndex = 0;
+    let isCheckingAnswer = true; // true when waiting for Submit, false when waiting for Next
+
+    const questionEl = document.getElementById('question');
+    const answerInput = document.getElementById('answerInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const feedbackEl = document.getElementById('feedback');
+
+    async function loadQuizData() {
       try {
         const response = await fetch(csvUrl);
         const csvText = await response.text();
-
-        // Parse CSV into rows (split by new line)
+        // Parse CSV rows
         const rows = csvText.trim().split('\n').map(row => row.split(','));
-
-        // Create table element
-        const table = document.createElement('table');
-
-        // Create table header from first row
-        const headerRow = document.createElement('tr');
-        rows[0].forEach(headerText => {
-          const th = document.createElement('th');
-          th.textContent = headerText;
-          headerRow.appendChild(th);
-        });
-        table.appendChild(headerRow);
-
-        // Add remaining rows as table rows
-        for(let i = 1; i < rows.length; i++) {
-          const tr = document.createElement('tr');
-          rows[i].forEach(cellText => {
-            const td = document.createElement('td');
-            td.textContent = cellText;
-            tr.appendChild(td);
-          });
-          table.appendChild(tr);
-        }
-
-        // Add table to the page
-        const container = document.getElementById('table-container');
-        container.innerHTML = ''; // Clear "Loading..."
-        container.appendChild(table);
-
+        // Remove header row and store as array of objects {Question, Answer}
+        quizData = rows.slice(1).map(r => ({
+          question: r[0].trim(),
+          answer: r[1].trim(),
+        }));
+        showQuestion();
       } catch (error) {
-        console.error('Error loading Google Sheet:', error);
-        document.getElementById('table-container').textContent = 'Failed to load data.';
+        questionEl.textContent = 'Failed to load quiz data.';
+        console.error(error);
       }
     }
 
-    window.onload = loadSheet;
+    function showQuestion() {
+      if (currentQuestionIndex >= quizData.length) {
+        // Quiz finished
+        questionEl.textContent = 'Quiz complete! Well done.';
+        answerInput.style.display = 'none';
+        submitBtn.style.display = 'none';
+        feedbackEl.textContent = '';
+        return;
+      }
+
+      const q = quizData[currentQuestionIndex];
+      questionEl.textContent = `Q${currentQuestionIndex + 1}: ${q.question}`;
+      answerInput.value = '';
+      answerInput.disabled = false;
+      feedbackEl.textContent = '';
+      submitBtn.textContent = 'Submit';
+      isCheckingAnswer = true;
+      answerInput.focus();
+    }
+
+    function checkAnswer() {
+      const userAnswer = answerInput.value.trim();
+      const correctAnswer = quizData[currentQuestionIndex].answer;
+
+      if (userAnswer === '') {
+        feedbackEl.textContent = 'Please enter an answer.';
+        return;
+      }
+
+      if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        feedbackEl.style.color = 'green';
+        feedbackEl.textContent = 'Correct! 🎉';
+      } else {
+        feedbackEl.style.color = 'red';
+        feedbackEl.textContent = `Wrong. The correct answer is ${correctAnswer}.`;
+      }
+
+      answerInput.disabled = true;
+      submitBtn.textContent = 'Next';
+      isCheckingAnswer = false;
+    }
+
+    submitBtn.addEventListener('click', () => {
+      if (isCheckingAnswer) {
+        checkAnswer();
+      } else {
+        currentQuestionIndex++;
+        showQuestion();
+      }
+    });
+
+    // Load the quiz data on page load
+    loadQuizData();
   </script>
 </body>
 </html>
