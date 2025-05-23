@@ -266,16 +266,32 @@ pauseBtn.addEventListener('click', () => {
     }
 
     function showQuestion() {
+
       if (currentQuestionIndex >= quizData.length) {
-        stopTimer();
-        questionEl.textContent = `Quiz complete! You got ${score} out of ${quizData.length} correct! 🎉`;
-        answerInput.style.display = 'none';
-        submitBtn.style.display = 'none';
-        feedbackEl.textContent = `Time elapsed: ${formatTime(elapsedSeconds)}`;
-        feedbackEl.style.color = 'black';
-        pauseBtn.style.display = 'none';
-        return;
-      }
+  stopTimer();
+  questionEl.textContent = `Quiz complete! You got ${score} out of ${quizData.length} correct! 🎉`;
+  answerInput.style.display = 'none';
+  submitBtn.style.display = 'none';
+  feedbackEl.textContent = `Time elapsed: ${formatTime(elapsedSeconds)}`;
+  feedbackEl.style.color = 'black';
+  pauseBtn.style.display = 'none';
+
+  const reviewContainer = document.getElementById('reviewContainer');
+  const reviewContent = document.getElementById('reviewContent');
+  reviewContainer.style.display = 'block';
+
+  reviewContent.innerHTML = reviewData.map((item, index) => `
+    <div style="margin-bottom: 10px;">
+      <strong>Q${index + 1}: ${item.question}</strong><br />
+      Your answer: <span style="color: ${item.isCorrect ? 'green' : 'red'}">${item.yourAnswer}</span><br />
+      ${item.isCorrect ? '' : `Correct answer: <strong>${item.correctAnswer}</strong>`}
+    </div>
+  `).join('');
+  
+  return;
+}
+
+
 
       const q = quizData[currentQuestionIndex];
       questionEl.textContent = `Q${currentQuestionIndex + 1}: ${q.question}`;
