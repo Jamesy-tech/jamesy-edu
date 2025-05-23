@@ -27,6 +27,17 @@
   z-index: 100;
 }
 
+.button-outline {
+  border-radius:1px;
+  outline:solid black 1px;
+  border:none;
+}
+
+
+.button-outline:hover {
+ outline:solid dodgerblue 2px;
+}
+
 #pausedOverlay.show {
   opacity: 1;
   pointer-events: auto;
@@ -41,6 +52,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+.
 #resumeBtn {
   margin-top: 20px;
   font-size: 1.1rem;
@@ -287,6 +299,7 @@ pauseBtn.addEventListener('click', () => {
         Your answer: <span style="color: ${item.isCorrect ? 'green' : 'red'}">${item.yourAnswer}</span><br />
         ${item.isCorrect ? '' : `Correct answer: <strong>${item.correctAnswer}</strong>`}
       </div>
+      <button class="button_outline">Try again</button>
     `).join('');
     
     return;
