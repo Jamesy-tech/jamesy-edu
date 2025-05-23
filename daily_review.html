@@ -298,8 +298,8 @@ pauseBtn.addEventListener('click', () => {
         <strong>Q${index + 1}: ${item.question}</strong><br />
         Your answer: <span style="color: ${item.isCorrect ? 'green' : 'red'}">${item.yourAnswer}</span><br />
         ${item.isCorrect ? '' : `Correct answer: <strong>${item.correctAnswer}</strong>`}
+         <button class="button_outline">Try again</button>
       </div>
-      <button class="button_outline">Try again</button>
     `).join('');
     
     return;
